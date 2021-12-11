@@ -1,3 +1,4 @@
+[![Python Unit Tests](https://github.com/mateuskahler/kriptoTulha/actions/workflows/action-automated-tests.yml/badge.svg)](https://github.com/mateuskahler/kriptoTulha/actions/workflows/action-automated-tests.yml)  
 # kriptoTulha
 Para armazenar dados encriptografados.
 
