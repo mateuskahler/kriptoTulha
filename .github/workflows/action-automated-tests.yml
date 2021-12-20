@@ -17,6 +17,9 @@ jobs:
           echo "🔎 Branch ${{ github.ref }}"
           echo "🖥️ Cloned ${{ github.repository }}."
           echo "Version $(python --version)"
+      - name: Install dependencies
+        run: |
+          pip3 install -r requirements.txt
       - name: Run Python unit tests
         run: |
           python -m unittest
