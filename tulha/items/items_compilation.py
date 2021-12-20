@@ -12,7 +12,7 @@ class ItemsCompilation:
 
         return new_id
 
-    def dump(self) -> bytearray:
+    def dumps(self) -> bytearray:
         """
         returns:
             bytearray containing the serialized representation of this instance

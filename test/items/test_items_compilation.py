@@ -10,13 +10,10 @@ class SerializableItemsCompilation(unittest.TestCase):
         Encodes some compilations of items and decode them back.
         Items in the decoded compilation must match the original.
         """
-        compilations = [
-            ItemsCompilation(),
-            build_sample_compilationA(),
-            build_sample_compilationB()
-        ]
+        compilations = sample_compilations()
+
         for compilation in compilations:
-            serialized_compilaton = compilation.dump()
+            serialized_compilaton = compilation.dumps()
             decoded_compilation, message = loads_from_stream(
                 serialized_compilaton)
 
@@ -40,7 +37,7 @@ class SerializableItemsCompilation(unittest.TestCase):
         """
         # Stream corrupted at last item
         compilation = build_sample_compilationB()
-        invalid_stream = compilation.dump()
+        invalid_stream = compilation.dumps()
         invalid_stream.pop()
 
         decoded_compilation, message = loads_from_stream(invalid_stream)
@@ -52,13 +49,15 @@ class SerializableItemsCompilation(unittest.TestCase):
                              compilation_without_last_item)
 
 
-def _build_compilation(title_text_pairs: list[(str, str)]) -> ItemsCompilation:
-    compilation = ItemsCompilation()
-
-    for title, text in title_text_pairs:
-        compilation.add_entry(title, text)
-
-    return compilation
+def sample_compilations() -> list[ItemsCompilation]:
+    """
+    Returns a list of ItemsCompilation for testing purposes.
+    """
+    return [
+        ItemsCompilation(),
+        build_sample_compilationA(),
+        build_sample_compilationB()
+    ]
 
 
 def build_sample_compilationA() -> ItemsCompilation:
@@ -86,3 +85,12 @@ def build_sample_compilationB() -> ItemsCompilation:
         ('Secret Verse', 'هناك طيور في السماء\r\n! الكثير!'),
     ]
     return _build_compilation(entries)
+
+
+def _build_compilation(title_text_pairs: list[(str, str)]) -> ItemsCompilation:
+    compilation = ItemsCompilation()
+
+    for title, text in title_text_pairs:
+        compilation.add_entry(title, text)
+
+    return compilation
