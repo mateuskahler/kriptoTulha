@@ -3,7 +3,7 @@ from tulha.byte_manipulation.serializable_string import \
     dumps, loads_from_stream
 
 
-class SerializableUnsigned(unittest.TestCase):
+class SerializableString(unittest.TestCase):
     def test_serialization(self):
         """
         Encodes some strings and decode them back.
