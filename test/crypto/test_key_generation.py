@@ -59,3 +59,52 @@ class KeyDerivation(unittest.TestCase):
                 key, salt = generate_key(p, s)
                 self.assertEqual(s, salt)
                 self.assertEqual(key, self.keys[p_index][s_index])
+
+    def test_salt_verification(self):
+        """
+        Verifies that trying to generate a key using an invalid salt actually generates a new valid salt.
+        """
+        password_sample = b'0000010100111001'
+
+        # trying to generate a key without salt
+        key, salt = generate_key(password_sample)
+
+        repeat_key, repeat_salt = generate_key(password_sample, salt)
+        self.assertEqual(key, repeat_key)
+        self.assertEqual(salt, repeat_salt)
+
+        # trying to use empty string as salt
+        invalid_salt = ''
+        key, salt = generate_key(password_sample, invalid_salt)
+        self.assertNotEqual(salt, invalid_salt)
+
+        repeat_key, repeat_salt = generate_key(password_sample, salt)
+        self.assertEqual(key, repeat_key)
+        self.assertEqual(salt, repeat_salt)
+
+        # trying to use dict as salt
+        invalid_salt = {'dict': 'not allowed'}
+        key, salt = generate_key(password_sample, invalid_salt)
+        self.assertNotEqual(salt, invalid_salt)
+
+        repeat_key, repeat_salt = generate_key(password_sample, salt)
+        self.assertEqual(key, repeat_key)
+        self.assertEqual(salt, repeat_salt)
+
+        # trying to use a salt too small
+        invalid_salt = b'ogg'
+        key, salt = generate_key(password_sample, invalid_salt)
+        self.assertNotEqual(salt, invalid_salt)
+
+        repeat_key, repeat_salt = generate_key(password_sample, salt)
+        self.assertEqual(key, repeat_key)
+        self.assertEqual(salt, repeat_salt)
+
+        # trying to use a salt too big
+        invalid_salt = b'ogg_jj_kk_ll_oo_99_aa_ii_88_kk_12_77_99_00_!!_!!'
+        key, salt = generate_key(password_sample, invalid_salt)
+        self.assertNotEqual(salt, invalid_salt)
+
+        repeat_key, repeat_salt = generate_key(password_sample, salt)
+        self.assertEqual(key, repeat_key)
+        self.assertEqual(salt, repeat_salt)
