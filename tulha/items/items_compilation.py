@@ -60,7 +60,8 @@ def loads_from_stream(stream: memoryview) -> tuple[ItemsCompilation, str]:
             break
 
     if error is not None:
-        return (output, f'Error loading data! {len(output.entries)} items recoverd. '
+        return (output,
+                f'Error loading data! {len(output.entries)} items recoverd. '
                 f'Error: {error}')
     else:
         return (output, 'Load successful.')

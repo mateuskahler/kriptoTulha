@@ -33,7 +33,8 @@ class SerializableItemsCompilation(unittest.TestCase):
 
     def test_keeping_decoded_items_on_deserialization_error(self):
         """
-        Verify that trying to deserialize partially invalid streams fails gracefully.
+        Verify that trying to deserialize partially invalid streams
+        fails gracefully.
         """
         # Stream corrupted at last item
         compilation = build_sample_compilationB()

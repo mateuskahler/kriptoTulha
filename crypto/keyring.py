@@ -5,13 +5,15 @@ from .salt import validate_salt
 
 def generate_key(password: bytes, salt: bytes = None) -> tuple[bytes, bytes]:
     """
-    Given a password and an optional salt, returns the generated key and the salt.
+    Given a password and an optional salt, returns the generated key and the
+    salt.
     If no salt is given, a random one is generated.
     If a wrong length salt is given, a new random one is generated.
 
     Password must be bytes (or a list thereof). Cannot be a string!
 
-    Calling this function again with same pasword and salt generates the same key.
+    Calling this function again with same pasword and salt generates the
+    same key.
     """
     from .parameters import KEY_DERIVATION_SALT_SIZE, \
         KEY_DERIVATION_THREADS, KEY_DERIVATION_KEY_SIZE, \
