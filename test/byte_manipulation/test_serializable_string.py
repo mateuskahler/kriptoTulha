@@ -59,9 +59,9 @@ class SerializableString(unittest.TestCase):
         self.assertRaisesRegex(RuntimeError, "End of stream",
                                loads_from_stream, invalid_stream)
 
-    def test_error_on_deserializing_short_stream(self):
+    def test_error_on_deserializing_invalid_stream(self):
         """
-        Verify that trying to deserialize invalid utf-8 raises the 
+        Verify that trying to deserialize invalid utf-8 raises the
         correct exception.
         """
         # (Not sure I will ever handle this, but still)
@@ -81,7 +81,7 @@ class SerializableString(unittest.TestCase):
             dumps as serialize_unsigned
 
         for invalid_sequence in invalid_sequences:
-            # We have to manually create the stream, since the encoding in invalid
+            # Manually create an invalid stream
             invalid_stream = serialize_unsigned(len(invalid_sequence))
             invalid_stream.extend(invalid_sequence)
 
