@@ -26,4 +26,4 @@ jobs:
           python -m flake8
       - name: Run Python unit tests
         run: |
-          python -m unittest
+          python -m unittest -v
