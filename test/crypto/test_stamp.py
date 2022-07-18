@@ -47,6 +47,21 @@ class IntegrityStamp(unittest.TestCase):
                 self.assertFalse(validate_integrity_stamp(
                     msg_value, corrupted_stamp, key_value))
 
+    def test_wrong_stamp_size_error(self):
+        """
+        Checks if a wrong sized stamp generates the expected error.
+        """
+        from crypto.parameters import INTEGRITY_STAMP_HASH_SIZE, \
+            INTEGRITY_STAMP_SALT_SIZE
+        expected_size = INTEGRITY_STAMP_HASH_SIZE + INTEGRITY_STAMP_SALT_SIZE
+        invalid_stamp = bytes([0xff] * (expected_size - 1))
+
+        message = self.messages[0]
+        key = self.keys[0]
+        self.assertRaisesRegex(RuntimeError, "wrong size",
+                               validate_integrity_stamp,
+                               message, invalid_stamp, key)
+
     def corrupt_stamp(stamp: bytes) -> bytes:
         new_stamp = bytearray(stamp)
         new_stamp[0] ^= 1
