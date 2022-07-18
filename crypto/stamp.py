@@ -11,16 +11,9 @@ def generate_integrity_stamp(message: memoryview, crypo_key: bytes) -> bytes:
 
 def validate_integrity_stamp(message: memoryview, stamp: bytes,
                              crypo_key: bytes) -> bool:
-    from .parameters import INTEGRITY_STAMP_HASH_SIZE, \
-        INTEGRITY_STAMP_SALT_SIZE
+    from .parameters import INTEGRITY_STAMP_HASH_SIZE
 
-    expected_stamp_size = INTEGRITY_STAMP_HASH_SIZE + INTEGRITY_STAMP_SALT_SIZE
-    provided_stamp_size = len(stamp)
-    if provided_stamp_size != expected_stamp_size:
-        raise RuntimeError(
-            f'Integrity stamp has wrong size. '
-            f'Expected {expected_stamp_size}, '
-            f'received {provided_stamp_size}.')
+    check_stamp_size(stamp)
 
     provided_hash = stamp[:INTEGRITY_STAMP_HASH_SIZE]
     salt = stamp[INTEGRITY_STAMP_HASH_SIZE:]
@@ -43,3 +36,16 @@ def generate_hash(message: memoryview, crypo_key: bytes,
         salt=salt)
 
     return hasher.digest(), salt
+
+
+def check_stamp_size(stamp: bytes):
+    from .parameters import INTEGRITY_STAMP_HASH_SIZE, \
+        INTEGRITY_STAMP_SALT_SIZE
+
+    expected_stamp_size = INTEGRITY_STAMP_HASH_SIZE + INTEGRITY_STAMP_SALT_SIZE
+    provided_stamp_size = len(stamp)
+    if provided_stamp_size != expected_stamp_size:
+        raise RuntimeError(
+            f'Integrity stamp has wrong size. '
+            f'Expected {expected_stamp_size}, '
+            f'received {provided_stamp_size}.')
