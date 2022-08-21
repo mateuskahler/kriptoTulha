@@ -17,7 +17,7 @@ class SerializableItemsCompilation(unittest.TestCase):
             decoded_compilation, message = loads_from_stream(
                 serialized_compilaton)
 
-            assert('success' in message.lower())
+            assert ('success' in message.lower())
             self.assertDictEqual(compilation.entries,
                                  decoded_compilation.entries)
 
@@ -28,7 +28,7 @@ class SerializableItemsCompilation(unittest.TestCase):
         # Stream without meaningful information
         invalid_stream = [0x80]
         decoded_compilation, message = loads_from_stream(invalid_stream)
-        assert('error' in message.lower())
+        assert ('error' in message.lower())
         self.assertDictEqual(decoded_compilation.entries, {})
 
     def test_keeping_decoded_items_on_deserialization_error(self):
@@ -42,7 +42,7 @@ class SerializableItemsCompilation(unittest.TestCase):
         invalid_stream.pop()
 
         decoded_compilation, message = loads_from_stream(invalid_stream)
-        assert('error' in message.lower())
+        assert ('error' in message.lower())
 
         compilation_without_last_item = compilation.entries
         compilation_without_last_item.popitem()
