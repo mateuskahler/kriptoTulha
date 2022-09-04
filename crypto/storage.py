@@ -8,6 +8,34 @@ from .parameters import KEY_DERIVATION_SALT_SIZE, \
     ENCRYPT_CHACHA_NONCE_SIZE
 
 
+def write_to_file(filename: str,
+                  content: bytes,
+                  user_password: str):
+    password = user_password.encode(encoding='utf-8')
+
+    file_content = assemble_encrypted_file(content, password)
+    with open(filename, 'wb') as destination_file:
+        destination_file.write(file_content)
+
+
+def load_from_file(filename: str,
+                   user_password: str) -> bytes:
+    password = user_password.encode(encoding='utf-8')
+
+    with open(filename, 'rb') as source_file:
+        content = source_file.read()
+
+    file_valid, recovered_content = disassemble_encrypted_file(
+        content, password)
+
+    if file_valid is True:
+        return recovered_content
+    else:
+        raise RuntimeError(
+            f'Error interpreting the file {filename}. '
+            'Probably wrong password provided.')
+
+
 def assemble_encrypted_file(content: bytes, password: bytes) -> bytes:
     primary_key, primary_salt = generate_key(password)
     secondary_key, secondary_salt = generate_key(password)
