@@ -58,8 +58,6 @@ def check_file_size(file_content: bytes):
 
 
 def extract_key_derivation_salt(file_content: bytes) -> tuple[bytes, bytes]:
-    check_file_size(file_content)
-
     salt = file_content[:KEY_DERIVATION_SALT_SIZE]
     extracted_content = file_content[KEY_DERIVATION_SALT_SIZE:]
 
