@@ -30,7 +30,8 @@ class ItemsCompilation:
         return self.id_counter
 
 
-def loads_from_stream(stream: memoryview) -> tuple[ItemsCompilation, str]:
+def loads_from_stream(stream: memoryview) \
+        -> tuple[ItemsCompilation, str | None]:
     """
     Tries to decode a stream into a ItemsCompilation.
     In case of any errors, it keeps the succesfully decoded items
@@ -64,4 +65,4 @@ def loads_from_stream(stream: memoryview) -> tuple[ItemsCompilation, str]:
                 f'Error loading data! {len(output.entries)} items recoverd. '
                 f'Error: {error}')
     else:
-        return (output, 'Load successful.')
+        return (output, None)
