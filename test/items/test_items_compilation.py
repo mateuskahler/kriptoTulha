@@ -14,10 +14,10 @@ class SerializableItemsCompilation(unittest.TestCase):
 
         for compilation in compilations:
             serialized_compilaton = compilation.dumps()
-            decoded_compilation, message = loads_from_stream(
+            decoded_compilation, errors = loads_from_stream(
                 serialized_compilaton)
 
-            assert ('success' in message.lower())
+            assert (errors is None)
             self.assertDictEqual(compilation.entries,
                                  decoded_compilation.entries)
 
@@ -28,6 +28,7 @@ class SerializableItemsCompilation(unittest.TestCase):
         # Stream without meaningful information
         invalid_stream = [0x80]
         decoded_compilation, message = loads_from_stream(invalid_stream)
+        assert (message is not None)
         assert ('error' in message.lower())
         self.assertDictEqual(decoded_compilation.entries, {})
 
@@ -42,6 +43,7 @@ class SerializableItemsCompilation(unittest.TestCase):
         invalid_stream.pop()
 
         decoded_compilation, message = loads_from_stream(invalid_stream)
+        assert (message is not None)
         assert ('error' in message.lower())
 
         compilation_without_last_item = compilation.entries
