@@ -25,6 +25,12 @@ class ItemsCompilation:
 
         return output
 
+    def existing_ids(self) -> list[int]:
+        return list(self.entries.keys())
+
+    def get_item_by_id(self, iid: int) -> SingleItem:
+        return self.entries[iid]
+
     def _generate_new_id(self) -> int:
         self.id_counter += 1
         return self.id_counter

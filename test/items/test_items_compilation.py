@@ -51,6 +51,19 @@ class SerializableItemsCompilation(unittest.TestCase):
         self.assertDictEqual(decoded_compilation.entries,
                              compilation_without_last_item)
 
+    def test_get_items_by_id(self):
+        """
+        Getting items by numeric id returns expected item.
+        """
+        compilations = sample_compilations()
+
+        for compilation in compilations:
+            existing_ids = compilation.existing_ids()
+            self.assertEqual(len(existing_ids),  len(compilation.entries))
+
+            for (iid, item) in compilation.entries.items():
+                self.assertEqual(compilation.get_item_by_id(iid), item)
+
 
 def sample_compilations() -> list[ItemsCompilation]:
     """
