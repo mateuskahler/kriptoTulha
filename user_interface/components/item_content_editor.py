@@ -1,9 +1,15 @@
 import tkinter as tk
 from tkinter import Frame, ttk
+from typing import Callable
+
+from tulha import ItemsCompilation
 
 
 class ItemContentEditor:
-    def __init__(self, parent: Frame):
+    def __init__(self, parent: Frame,
+                 get_content_callback: Callable[[], ItemsCompilation]):
+        self.get_content_callback = get_content_callback
+
         frame = ttk.Frame(
             parent, padding="5 5 5 5", style="EstiloY.TFrame")
 
@@ -22,10 +28,18 @@ class ItemContentEditor:
 
         self.editable_field = editable_field
 
-        frame.columnconfigure(0, weight=1)
-        frame.rowconfigure(0, weight=1)
-
         frame.grid(column=1, row=0, sticky="nsew")
+
+    def load_item_text(self, item_iid: int | None):
+        if item_iid is None:
+            self.editable_field.delete('1.0', 'end')
+            self.editable_field.config(state='disabled')
+        else:
+            content = self.get_content_callback().get_item_by_id(item_iid).text
+
+            self.editable_field.config(state='normal')
+            self.editable_field.delete('1.0', 'end')
+            self.editable_field.insert('end', content)
 
 
 class ObservableText(tk.Text):
