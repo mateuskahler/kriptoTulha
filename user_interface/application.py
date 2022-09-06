@@ -1,6 +1,6 @@
 from tulha import ItemsCompilation
 
-from copy import deepcopy
+from typing import Callable
 import tkinter as tk
 
 from .components import MainFrame
@@ -12,19 +12,21 @@ class KryptoTulhaUserInterface:
     """
 
     def __init__(self,
-                 initial_state: ItemsCompilation,
                  save_file_callback: None,
-                 open_file_callback: None):
+                 open_file_callback:
+                 Callable[[str, str],
+                          tuple[ItemsCompilation | None, str | None]]):
         """
         initial_state: ItemsCompilation to launch the application with
         save_file_callback: will be called when user requests to save
-        open_file_callback: will be called when user requests to open a file
+        open_file_callback: will be called when user requests to open a file.
+            Receives the path and the password as arguments.
 
         After creating the instance, call the "assume_control" method
         to pass the flow of the program to the graphical interface.
         """
-        self.original_state = deepcopy(initial_state)
-        self.current_state = deepcopy(initial_state)
+        self.original_state = None
+        self.current_state = None
         self.save_file_callback = save_file_callback
         self.open_file_callback = open_file_callback
 
