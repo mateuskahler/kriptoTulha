@@ -20,23 +20,20 @@ class ItemsSearchBar:
         frame = ttk.Frame(parent, padding="0 0 0 0")
         frame.grid(column=0, row=0, sticky="nsew")
 
+        search_titles_label = ttk.Label(frame, text='Search ', anchor='e')
+        search_titles_label.grid(column=0, row=0, sticky="nsew")
+
         self.filter_text = StringVar()
         search_field = tk.Entry(
             frame, textvariable=self.filter_text)
         self.filter_text.trace_add(
             'write', lambda *args: self.atualiza_lista_visível())
 
-        search_field.grid(column=0, row=0, sticky="nsew")
+        search_field.grid(column=1, row=0, sticky="nsew")
+        self.search_field = search_field
 
-        empty_space = ttk.Frame(frame)
-        empty_space.grid(column=1, row=0, sticky="nsew")
-
-        search_scope_button = ttk.Button(frame, text='T')
-        search_scope_button.grid(column=2, row=0, sticky="nsew")
-
-        frame.columnconfigure(0, weight=10)
+        frame.columnconfigure(0, weight=1)
         frame.columnconfigure(1, weight=1)
-        frame.columnconfigure(2, weight=0)
         frame.rowconfigure(0, weight=1)
 
 
