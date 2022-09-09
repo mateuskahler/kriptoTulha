@@ -12,7 +12,8 @@ class KryptoTulhaUserInterface:
     """
 
     def __init__(self,
-                 save_file_callback: None,
+                 save_file_callback:
+                 Callable[[ItemsCompilation, str, str], None],
                  open_file_callback:
                  Callable[[str, str],
                           tuple[ItemsCompilation | None, str | None]]):

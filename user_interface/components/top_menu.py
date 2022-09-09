@@ -5,11 +5,12 @@ from typing import Callable
 class TopMenu:
     def __init__(self,
                  parent: Frame,
-                 save_file_callback: None,
+                 request_save_file_callback: Callable[[str], None],
                  request_open_file_callback: Callable[[str], None],
                  add_item_callback: None,
                  remove_item_callback: None
                  ) -> None:
+        self.request_save_file_callback = request_save_file_callback
         self.request_open_file_callback = request_open_file_callback
 
         frame = ttk.Frame(parent, padding="5 5 5 0")
@@ -31,7 +32,7 @@ class TopMenu:
         button_open_file.grid(column=3, row=0, sticky="we")
 
         button_save_file = ttk.Button(frame, text='Save',
-                                      command=lambda *_: save_file_callback)
+                                      command=self.save_file_action)
         button_save_file.grid(column=4, row=0, sticky="we")
 
         frame.columnconfigure(0, weight=0)
@@ -46,10 +47,23 @@ class TopMenu:
             ('KryptoTulha files', '*.kryptoTulha'),
             ('All files', '*.*'))
         filename = filedialog.askopenfilename(
-            title='Select File',
+            title='Select File to Load',
             initialdir='.',
             filetypes=filetypes)
 
         if filename is not None:
             if len(filename) > 0:
                 self.request_open_file_callback(filename)
+
+    def save_file_action(self):
+        filetypes = (
+            ('KryptoTulha files', '*.kryptoTulha'),
+            ('All files', '*.*'))
+        filename = filedialog.asksaveasfilename(
+            title='Select File to Save',
+            initialdir='.',
+            filetypes=filetypes)
+
+        if filename is not None:
+            if len(filename) > 0:
+                self.request_save_file_callback(filename)
