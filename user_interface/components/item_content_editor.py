@@ -47,6 +47,7 @@ class ObservableText(tk.Text):
     Wrapper class to observe text modification
     based on
     https://stackoverflow.com/questions/40617515/python-tkinter-text-modified-callback
+    https://stackoverflow.com/questions/65228477/text-doesnt-contain-any-characters-tagged-with-sel-tkinter
     '''
 
     def __init__(self, *args, **kwargs):
@@ -57,6 +58,18 @@ class ObservableText(tk.Text):
         self.tk.createcommand(self._w, self._proxy)
 
     def _proxy(self, command, *args):
+        # cut/copy commands bound check
+        if command == 'get' and \
+            (args[0] == 'sel.first' and args[1] == 'sel.last') and \
+                not self.tag_ranges('sel'):
+            return ''
+
+        # delete commands bound check
+        if command == 'delete' and \
+            (args[0] == 'sel.first' and args[1] == 'sel.last') and \
+                not self.tag_ranges('sel'):
+            return None
+
         cmd = (self._orig, command) + args
         result = self.tk.call(cmd)
 
