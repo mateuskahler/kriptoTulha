@@ -71,9 +71,12 @@ class ObservableText(tk.Text):
             return None
 
         cmd = (self._orig, command) + args
-        result = self.tk.call(cmd)
-
-        if command in ("insert", "delete", "replace"):
-            self.event_generate("<<TextModified>>")
-
-        return result
+        try:
+            result = self.tk.call(cmd)
+        except Exception:
+            result = None
+        else:
+            if command in ("insert", "delete", "replace"):
+                self.event_generate("<<TextModified>>")
+        finally:
+            return result
