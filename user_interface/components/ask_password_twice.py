@@ -2,6 +2,15 @@ from tkinter import Toplevel, ttk
 
 
 class AskTwice():
+    """
+    A simple widget (despite the long source code) that offers two fields asking
+    for a password. Saves the passwords as the 'output' field if both inputs are
+    valid and equal.
+
+    Apart from the buttons, the widget is navigable by <Tab> and <Enter>, and
+    cancelable by <Esc>.
+    """
+
     def __init__(self, title: str, minimun_password_length: int):
         self.minimun_password_length = minimun_password_length
         self.output: None | str = None
@@ -144,5 +153,10 @@ class AskTwice():
 
 def ask_password_twice_dialog(title: str,
                               minimun_password_length: int) -> str | None:
+    """
+    Opens a windows that asks for a password input in two fields.
+
+    Returns the password as a string, or None if the user cancelled.
+    """
     ask_window = AskTwice(title, minimun_password_length)
     return ask_window.output
