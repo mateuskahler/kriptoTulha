@@ -13,7 +13,8 @@ class ContentScreen:
 
         self.items_navigator = ItemsNavigator(
             frame, self.get_content, self.item_selected)
-        self.content_frame = ItemContentEditor(frame, self.get_content)
+        self.content_frame = ItemContentEditor(
+            frame, self.get_content, self.item_edited)
 
         self.content = ItemsCompilation()
 
@@ -26,3 +27,8 @@ class ContentScreen:
 
     def item_selected(self, item_iid: int | None):
         self.content_frame.load_item_text(item_iid)
+
+    def item_edited(self, new_content: str):
+        item_iid = self.items_navigator.get_selected_item_iid()
+        if item_iid is not None:
+            self.content.change_text_of_item_by_id(item_iid, new_content)

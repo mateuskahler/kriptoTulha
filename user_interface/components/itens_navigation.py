@@ -24,6 +24,9 @@ class ItemsNavigator:
         self.serch_bar.clear_search()
         self.titles_list.update_visible_list()
 
+    def get_selected_item_iid(self) -> int | None:
+        return self.titles_list.get_selected_item_iid()
+
 
 class ItemsSearchBar:
     def __init__(self, parent: Frame):
