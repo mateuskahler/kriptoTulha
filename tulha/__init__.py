@@ -1,3 +1,3 @@
-from .items.items_compilation import ItemsCompilation
+from .items.items_compilation import ItemsCompilation, loads_from_stream
 
-__all__ = ['ItemsCompilation']
+__all__ = ['ItemsCompilation', 'loads_from_stream']
