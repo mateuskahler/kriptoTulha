@@ -31,6 +31,11 @@ class ItemsCompilation:
     def get_item_by_id(self, iid: int) -> SingleItem:
         return self.entries[iid]
 
+    def change_text_of_item_by_id(self, iid: int, new_text: str):
+        current_item = self.entries[iid]
+        new_item = SingleItem(title=current_item.title, text=new_text)
+        self.entries[iid] = new_item
+
     def _generate_new_id(self) -> int:
         self.id_counter += 1
         return self.id_counter
