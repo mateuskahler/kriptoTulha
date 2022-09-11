@@ -64,6 +64,21 @@ class SerializableItemsCompilation(unittest.TestCase):
             for (iid, item) in compilation.entries.items():
                 self.assertEqual(compilation.get_item_by_id(iid), item)
 
+    def test_change_text_of_item_by_id(self):
+        """
+        Changing item text by iid works.
+        """
+        compilations = sample_compilations()
+
+        for compilation in compilations:
+            existing_ids = compilation.existing_ids()
+            self.assertEqual(len(existing_ids),  len(compilation.entries))
+
+            for (iid, _) in compilation.entries.items():
+                new_text = 'changed'
+                compilation.change_text_of_item_by_id(iid, new_text)
+                self.assertEqual(compilation.get_item_by_id(iid).text, new_text)
+
 
 def sample_compilations() -> list[ItemsCompilation]:
     """
