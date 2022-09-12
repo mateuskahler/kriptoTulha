@@ -79,6 +79,20 @@ class SerializableItemsCompilation(unittest.TestCase):
                 compilation.change_text_of_item_by_id(iid, new_text)
                 self.assertEqual(compilation.get_item_by_id(iid).text, new_text)
 
+    def test_remove_entry_by_id(self):
+        """
+        Deleting item by iid works.
+        """
+        compilations = sample_compilations()
+
+        for compilation in compilations:
+            existing_ids = compilation.existing_ids()
+
+            for iid in existing_ids:
+                self.assertTrue(compilation.remove_entry_by_id(iid))
+                self.assertRaises(KeyError, compilation.get_item_by_id, iid)
+                self.assertFalse(compilation.remove_entry_by_id(iid))
+
 
 def sample_compilations() -> list[ItemsCompilation]:
     """
