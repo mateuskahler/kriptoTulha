@@ -1,12 +1,12 @@
 import tkinter as tk
-from tkinter import Frame, ttk
+from tkinter import ttk
 from typing import Callable
 
 from tulha import ItemsCompilation
 
 
 class ItemContentEditor:
-    def __init__(self, parent: Frame,
+    def __init__(self, parent: ttk.Frame,
                  get_content_callback: Callable[[], ItemsCompilation],
                  item_edited_callback):
         self.get_content_callback = get_content_callback

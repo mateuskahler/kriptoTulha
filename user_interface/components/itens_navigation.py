@@ -1,12 +1,12 @@
 import tkinter as tk
-from tkinter import Frame, StringVar, ttk, font
+from tkinter import StringVar, ttk, font
 from typing import Callable
 
 from tulha import ItemsCompilation
 
 
 class ItemsNavigator:
-    def __init__(self, parent: Frame,
+    def __init__(self, parent: ttk.Frame,
                  get_content_callback: Callable[[], ItemsCompilation],
                  has_item_been_modified_callback: Callable[[int], bool],
                  item_selected_callback: Callable[[int | None], None]):
@@ -32,7 +32,7 @@ class ItemsNavigator:
 
 
 class ItemsSearchBar:
-    def __init__(self, parent: Frame):
+    def __init__(self, parent: ttk.Frame):
         frame = ttk.Frame(parent, padding="0 0 0 0")
         frame.grid(column=0, row=0, sticky="nsew")
 
@@ -40,10 +40,10 @@ class ItemsSearchBar:
         search_titles_label.grid(column=0, row=0, sticky="nsew")
 
         self.filter_text = StringVar()
-        search_field = tk.Entry(
+        search_field = ttk.Entry(
             frame, textvariable=self.filter_text)
         self.filter_text.trace_add(
-            'write', lambda *args: self.atualiza_lista_visível())
+            'write', lambda *_: None)
 
         search_field.grid(column=1, row=0, sticky="nsew")
         self.search_field = search_field
@@ -57,7 +57,7 @@ class ItemsSearchBar:
 
 
 class ItemsTitleList:
-    def __init__(self, parent: Frame,
+    def __init__(self, parent: ttk.Frame,
                  get_content_callback: Callable[[], ItemsCompilation],
                  has_item_been_modified_callback: Callable[[int], bool],
                  item_selected_callback: Callable[[int | None], None]):
@@ -73,8 +73,8 @@ class ItemsTitleList:
         titles_list = ttk.Treeview(frame, selectmode="browse")
         titles_list['columns'] = ('titles')
         titles_list.heading(0, text='Items')
-        titles_list_scroll = tk.Scrollbar(frame, orient=tk.VERTICAL,
-                                          command=titles_list.yview)
+        titles_list_scroll = ttk.Scrollbar(frame, orient=tk.VERTICAL,
+                                           command=titles_list.yview)
         titles_list_scroll.grid(column=1, row=0, sticky='ns')
         titles_list.configure(yscroll=titles_list_scroll.set)
 
