@@ -36,14 +36,34 @@ class MainFrame():
         frame.rowconfigure(1, weight=1)
         self.frame = frame
 
-    def request_open_file_callback(self, filepath: str):
+    def request_open_file_callback(self) -> bool:
+        file_loaded_ok = False
+
+        if self.has_the_content_changed():
+            user_allows = self.propose_saving()
+            if not user_allows:
+                return False
+
+        filetypes = (
+            ('KryptoTulha files', '*.kryptoTulha'),
+            ('All files', '*.*'))
+        filename = filedialog.askopenfilename(
+            title='Select File to Load',
+            initialdir='.',
+            filetypes=filetypes)
+
         try:
-            self.request_password_and_open(filepath)
+            if filename is not None:
+                if len(filename) > 0:
+                    file_loaded_ok = self.request_password_and_open(filename)
 
         except Exception as e:
             message = get_message_from_exception(e)
             messagebox.showerror(title='Error opening file',
                                  message=message)
+            file_loaded_ok = False
+
+        return file_loaded_ok
 
     def request_save_file_callback(self) -> bool:
         file_saved_ok = False
@@ -69,14 +89,14 @@ class MainFrame():
 
         return file_saved_ok
 
-    def request_password_and_open(self, filepath):
+    def request_password_and_open(self, filepath) -> bool:
         base_file_name = os.path.splitext(os.path.basename(filepath))[0]
         user_password = simpledialog.askstring(
             title='Password Required',
             prompt=f'Enter the password for \"{base_file_name}\"',
             show='*')
         if user_password is None:
-            return
+            return False
 
         new_compilation, load_error = self.open_file_callback(
             filepath, user_password)
@@ -90,6 +110,7 @@ class MainFrame():
                                    message=f'{load_error}')
 
         self.load_new_compilation(new_compilation)
+        return True
 
     def request_password_and_save(self, filepath) -> bool:
         base_file_name = os.path.splitext(os.path.basename(filepath))[0]
