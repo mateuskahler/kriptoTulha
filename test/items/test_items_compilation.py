@@ -128,6 +128,8 @@ def build_sample_compilationB() -> ItemsCompilation:
         ('Secret Verse', 'নমস্কাৰ, মোৰ মৰমৰ বন্ধু।'),
         ('12345679', 'Այս տեքստային դաշտի մասին ոչ ոքի մի պատմիր։'),
         ('Secret Verse', 'هناك طيور في السماء\r\n! الكثير!'),
+        ('Title and no Text', ''),
+        ('', 'Text and no Title')
     ]
     return _build_compilation(entries)
 
