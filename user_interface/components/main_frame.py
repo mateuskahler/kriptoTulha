@@ -27,7 +27,7 @@ class MainFrame():
         self.top_menu = TopMenu(frame,
                                 self.request_save_file_callback,
                                 self.request_open_file_callback,
-                                None, None)
+                                self.request_add_item_callback, None)
 
         self.content_screen = ContentScreen(frame)
 
@@ -91,6 +91,11 @@ class MainFrame():
             self.content_screen.overwrite_original_content_with_current()
 
         return file_saved_ok
+
+    def request_add_item_callback(self, title: str):
+        new_iid = self.content_screen.content.add_entry(title, text='')
+        self.content_screen.items_navigator.reset_visibility()
+        self.content_screen.items_navigator.force_selection(new_iid)
 
     def request_password_and_open(self, filepath) -> bool:
         base_file_name = os.path.splitext(os.path.basename(filepath))[0]

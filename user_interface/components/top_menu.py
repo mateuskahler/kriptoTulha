@@ -1,4 +1,4 @@
-from tkinter import ttk
+from tkinter import ttk, simpledialog
 from typing import Callable
 
 
@@ -7,17 +7,18 @@ class TopMenu:
                  parent: ttk.Frame,
                  request_save_file_callback: Callable[[], bool],
                  request_open_file_callback: Callable[[], bool],
-                 add_item_callback: None,
+                 add_item_callback: Callable[[str], None],
                  remove_item_callback: None
                  ) -> None:
         self.request_save_file_callback = request_save_file_callback
         self.request_open_file_callback = request_open_file_callback
+        self.add_item_callback = add_item_callback
 
         frame = ttk.Frame(parent, padding="5 5 5 0")
         frame.grid(column=0, row=0, sticky="we")
 
         button_add_item = ttk.Button(
-            frame, text='+', command=lambda *_: add_item_callback)
+            frame, text='+', command=self.add_item)
         button_add_item.grid(column=0, row=0, sticky="we")
 
         button_del_item = ttk.Button(frame, text='-',
@@ -47,3 +48,14 @@ class TopMenu:
 
     def save_file_action(self):
         self.request_save_file_callback()
+
+    def add_item(self):
+        title = simpledialog.askstring(
+            title='New Item Title',
+            prompt='Provide a title for the new item:')
+        if title is None:
+            return
+        if len(title) == 0:
+            return
+
+        self.add_item_callback(title)
