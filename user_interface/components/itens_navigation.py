@@ -52,6 +52,9 @@ class ItemsSearchBar:
         search_field.grid(column=1, row=0, sticky="nsew")
         self.search_field = search_field
 
+        search_field.config(state='disabled')
+        search_titles_label.config(state='disabled')
+
         frame.columnconfigure(0, weight=1)
         frame.columnconfigure(1, weight=1)
         frame.rowconfigure(0, weight=1)
