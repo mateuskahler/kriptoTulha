@@ -27,6 +27,14 @@ class ContentScreen:
     def get_original_content(self):
         return self.original_content
 
+    def overwrite_original_content_with_current(self):
+        """
+        Useful after saving files, when the temporary content is promoted to be
+        considered the original reference.
+        """
+        self.original_content = deepcopy(self.content)
+        self.items_navigator.titles_list.tag_changed_items()
+
     def load_new_compilation(self, compilation: ItemsCompilation):
         self.original_content = deepcopy(compilation)
         self.content = compilation

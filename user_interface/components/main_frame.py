@@ -87,6 +87,9 @@ class MainFrame():
                                  message=message)
             file_saved_ok = False
 
+        if file_saved_ok:
+            self.content_screen.overwrite_original_content_with_current()
+
         return file_saved_ok
 
     def request_password_and_open(self, filepath) -> bool:
