@@ -26,6 +26,10 @@ class ItemsNavigator:
     def reset_visibility(self):
         self.serch_bar.clear_search()
         self.titles_list.update_visible_list()
+        self.titles_list.tag_changed_items()
+
+    def force_selection(self, item_iid: int):
+        self.titles_list.force_selection(item_iid)
 
     def get_selected_item_iid(self) -> int | None:
         return self.titles_list.get_selected_item_iid()
@@ -100,6 +104,9 @@ class ItemsTitleList:
         if iid is not None:
             self.iid_last_selected_item = iid
         self.item_selected_callback(iid)
+
+    def force_selection(self, item_iid: int):
+        self.titles_list.selection_set(f'{item_iid}')
 
     def get_selected_item_iid(self) -> int | None:
         selected_items = self.titles_list.selection()
