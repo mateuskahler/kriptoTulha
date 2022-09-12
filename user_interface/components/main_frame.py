@@ -1,4 +1,4 @@
-from tkinter import Tk, ttk, simpledialog, messagebox
+from tkinter import Tk, ttk, simpledialog, messagebox, filedialog
 from typing import Callable
 import os
 
@@ -34,6 +34,7 @@ class MainFrame():
         frame.columnconfigure(0, weight=1)
         frame.rowconfigure(0, weight=0)
         frame.rowconfigure(1, weight=1)
+        self.frame = frame
 
     def request_open_file_callback(self, filepath: str):
         try:
@@ -44,14 +45,29 @@ class MainFrame():
             messagebox.showerror(title='Error opening file',
                                  message=message)
 
-    def request_save_file_callback(self, filepath: str):
+    def request_save_file_callback(self) -> bool:
+        file_saved_ok = False
         try:
-            self.request_password_and_save(filepath)
+            filetypes = (
+                ('KryptoTulha files', '*.kryptoTulha'),
+                ('All files', '*.*'))
+            filename = filedialog.asksaveasfilename(
+                title='Select File to Save',
+                initialdir='.',
+                defaultextension='.kryptoTulha',
+                filetypes=filetypes)
+
+            if filename is not None:
+                if len(filename) > 0:
+                    file_saved_ok = self.request_password_and_save(filename)
 
         except Exception as e:
             message = get_message_from_exception(e)
             messagebox.showerror(title='Error saving file',
                                  message=message)
+            file_saved_ok = False
+
+        return file_saved_ok
 
     def request_password_and_open(self, filepath):
         base_file_name = os.path.splitext(os.path.basename(filepath))[0]
@@ -75,21 +91,48 @@ class MainFrame():
 
         self.load_new_compilation(new_compilation)
 
-    def request_password_and_save(self, filepath):
+    def request_password_and_save(self, filepath) -> bool:
         base_file_name = os.path.splitext(os.path.basename(filepath))[0]
         user_password = ask_password_twice_dialog(
             title=f'Saving \'{base_file_name}\'',
             minimun_password_length=RECOMMENDED_MINIMUN_PASSWORD_LENGTH)
 
         if user_password is None:
-            return
+            return False
 
         content = self.content_screen.get_content()
-
         self.save_file_callback(content, filepath, user_password)
+
+        return True
 
     def load_new_compilation(self, new_compilation: ItemsCompilation):
         self.content_screen.load_new_compilation(new_compilation)
+
+    def has_the_content_changed(self) -> bool:
+        return self.content_screen.has_the_content_changed()
+
+    def propose_saving(self) -> bool:
+        """
+        Returns True if the user choose to discard or if the user
+        choose to save and the save succeeded.
+        """
+        text = 'Would you like to save the current changes?'
+        buttons = [' Save ', ' Cancel ', ' Discard Changes! ']
+        save_id = 0
+        cancel_id = 1
+        discard_id = 2
+        user_answer = simpledialog.SimpleDialog(
+            master=self.frame,
+            text=text,
+            buttons=buttons,
+            cancel=1,
+            title="Save changes?").go()
+        if user_answer == cancel_id:
+            return False
+        if user_answer == discard_id:
+            return True
+        if user_answer == save_id:
+            return self.request_save_file_callback()
 
 
 def get_message_from_exception(e: Exception):

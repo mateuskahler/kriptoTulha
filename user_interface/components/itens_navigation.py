@@ -9,7 +9,7 @@ from tulha import ItemsCompilation
 class ItemsNavigator:
     def __init__(self, parent: Frame,
                  get_content_callback: Callable[[], ItemsCompilation],
-                 get_original_content_callback: Callable[[], ItemsCompilation],
+                 has_item_been_modified_callback: Callable[[int], bool],
                  item_selected_callback: Callable[[int | None], None]):
         frame = ttk.Frame(parent, padding="0 5 5 5")
         frame.grid(column=0, row=0, sticky="nsew")
@@ -17,7 +17,7 @@ class ItemsNavigator:
         self.serch_bar = ItemsSearchBar(frame)
         self.titles_list = ItemsTitleList(
             frame, get_content_callback,
-            get_original_content_callback,
+            has_item_been_modified_callback,
             item_selected_callback)
 
         frame.columnconfigure(0, weight=1)
@@ -60,10 +60,10 @@ class ItemsSearchBar:
 class ItemsTitleList:
     def __init__(self, parent: Frame,
                  get_content_callback: Callable[[], ItemsCompilation],
-                 get_original_content_callback: Callable[[], ItemsCompilation],
+                 has_item_been_modified_callback: Callable[[int], bool],
                  item_selected_callback: Callable[[int | None], None]):
         self.get_content_callback = get_content_callback
-        self.get_original_content_callback = get_original_content_callback
+        self.has_item_been_modified = has_item_been_modified_callback
         self.item_selected_callback = item_selected_callback
 
         self.iid_last_selected_item: int | None = None
@@ -130,19 +130,3 @@ class ItemsTitleList:
                 self.titles_list.item(f'{item_iid}', tags='content_modified')
             else:
                 self.titles_list.item(f'{item_iid}', tags='')
-
-    def has_item_been_modified(self, item_iid: int) -> bool:
-        original_content = self.get_original_content_callback()
-        current_content = self.get_content_callback()
-
-        try:
-            original_item = original_content.get_item_by_id(item_iid)
-            current_item = current_content.get_item_by_id(item_iid)
-
-            title_changed = original_item.title != current_item.title
-            text_changed = original_item.text != current_item.text
-
-            return title_changed or text_changed
-
-        except KeyError:
-            return True
