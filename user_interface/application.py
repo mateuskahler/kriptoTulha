@@ -31,8 +31,6 @@ class KryptoTulhaUserInterface:
         self.save_file_callback = save_file_callback
         self.open_file_callback = open_file_callback
 
-        self.open_dialog = None
-
     def assume_control(self):
         """
         Creates the graphical interface and takes control of the program until
@@ -55,5 +53,8 @@ class KryptoTulhaUserInterface:
         self.window_root.mainloop()
 
     def tries_to_close(self):
-        if self.open_dialog is None:
+        if self.main_frame.has_the_content_changed():
+            if self.main_frame.propose_saving():
+                self.window_root.destroy()
+        else:
             self.window_root.destroy()

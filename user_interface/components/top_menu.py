@@ -5,7 +5,7 @@ from typing import Callable
 class TopMenu:
     def __init__(self,
                  parent: Frame,
-                 request_save_file_callback: Callable[[str], None],
+                 request_save_file_callback: Callable[[str], bool],
                  request_open_file_callback: Callable[[str], None],
                  add_item_callback: None,
                  remove_item_callback: None
@@ -56,14 +56,4 @@ class TopMenu:
                 self.request_open_file_callback(filename)
 
     def save_file_action(self):
-        filetypes = (
-            ('KryptoTulha files', '*.kryptoTulha'),
-            ('All files', '*.*'))
-        filename = filedialog.asksaveasfilename(
-            title='Select File to Save',
-            initialdir='.',
-            filetypes=filetypes)
-
-        if filename is not None:
-            if len(filename) > 0:
-                self.request_save_file_callback(filename)
+        self.request_save_file_callback()
