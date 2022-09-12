@@ -1,12 +1,12 @@
-from tkinter import Frame, ttk, filedialog
+from tkinter import Frame, ttk
 from typing import Callable
 
 
 class TopMenu:
     def __init__(self,
                  parent: Frame,
-                 request_save_file_callback: Callable[[str], bool],
-                 request_open_file_callback: Callable[[str], None],
+                 request_save_file_callback: Callable[[], bool],
+                 request_open_file_callback: Callable[[], bool],
                  add_item_callback: None,
                  remove_item_callback: None
                  ) -> None:
@@ -43,17 +43,7 @@ class TopMenu:
         frame.rowconfigure(0, weight=0)
 
     def open_file_action(self):
-        filetypes = (
-            ('KryptoTulha files', '*.kryptoTulha'),
-            ('All files', '*.*'))
-        filename = filedialog.askopenfilename(
-            title='Select File to Load',
-            initialdir='.',
-            filetypes=filetypes)
-
-        if filename is not None:
-            if len(filename) > 0:
-                self.request_open_file_callback(filename)
+        self.request_open_file_callback()
 
     def save_file_action(self):
         self.request_save_file_callback()
