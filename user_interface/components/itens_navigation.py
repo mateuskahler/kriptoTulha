@@ -1,4 +1,3 @@
-from copy import copy
 import tkinter as tk
 from tkinter import Frame, StringVar, ttk, font
 from typing import Callable
@@ -79,7 +78,7 @@ class ItemsTitleList:
         titles_list_scroll.grid(column=1, row=0, sticky='ns')
         titles_list.configure(yscroll=titles_list_scroll.set)
 
-        italic_font = copy(font.nametofont('TkTextFont'))
+        italic_font = font.Font(font=font.nametofont('TkTextFont'))
         italic_font.config(slant='italic', weight='bold')
         titles_list.tag_configure(
             'content_modified', font=italic_font)
