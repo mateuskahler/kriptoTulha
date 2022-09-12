@@ -1,5 +1,5 @@
 from copy import deepcopy
-from tkinter import Frame, ttk
+from tkinter import ttk
 
 from tulha import ItemsCompilation
 
@@ -8,7 +8,7 @@ from .item_content_editor import ItemContentEditor
 
 
 class ContentScreen:
-    def __init__(self, parent: Frame) -> None:
+    def __init__(self, parent: ttk.Frame) -> None:
         frame = ttk.Frame(parent, padding="5 0 5 5")
         frame.grid(column=0, row=1, sticky="nsew")
 

@@ -1,10 +1,10 @@
-from tkinter import Frame, ttk
+from tkinter import ttk
 from typing import Callable
 
 
 class TopMenu:
     def __init__(self,
-                 parent: Frame,
+                 parent: ttk.Frame,
                  request_save_file_callback: Callable[[], bool],
                  request_open_file_callback: Callable[[], bool],
                  add_item_callback: None,
