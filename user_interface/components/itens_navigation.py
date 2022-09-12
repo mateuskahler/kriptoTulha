@@ -1,3 +1,4 @@
+from copy import copy
 import tkinter as tk
 from tkinter import Frame, StringVar, ttk, font
 from typing import Callable
@@ -8,13 +9,16 @@ from tulha import ItemsCompilation
 class ItemsNavigator:
     def __init__(self, parent: Frame,
                  get_content_callback: Callable[[], ItemsCompilation],
+                 get_original_content_callback: Callable[[], ItemsCompilation],
                  item_selected_callback: Callable[[int | None], None]):
         frame = ttk.Frame(parent, padding="0 5 5 5")
         frame.grid(column=0, row=0, sticky="nsew")
 
         self.serch_bar = ItemsSearchBar(frame)
         self.titles_list = ItemsTitleList(
-            frame, get_content_callback, item_selected_callback)
+            frame, get_content_callback,
+            get_original_content_callback,
+            item_selected_callback)
 
         frame.columnconfigure(0, weight=1)
         frame.rowconfigure(0, weight=0)
@@ -56,8 +60,10 @@ class ItemsSearchBar:
 class ItemsTitleList:
     def __init__(self, parent: Frame,
                  get_content_callback: Callable[[], ItemsCompilation],
+                 get_original_content_callback: Callable[[], ItemsCompilation],
                  item_selected_callback: Callable[[int | None], None]):
         self.get_content_callback = get_content_callback
+        self.get_original_content_callback = get_original_content_callback
         self.item_selected_callback = item_selected_callback
 
         self.iid_last_selected_item: int | None = None
@@ -72,7 +78,11 @@ class ItemsTitleList:
                                           command=titles_list.yview)
         titles_list_scroll.grid(column=1, row=0, sticky='ns')
         titles_list.configure(yscroll=titles_list_scroll.set)
-        titles_list.tag_configure('modificado', font=font.Font(slant='italic'))
+
+        italic_font = copy(font.nametofont('TkTextFont'))
+        italic_font.config(slant='italic', weight='bold')
+        titles_list.tag_configure(
+            'content_modified', font=italic_font)
 
         titles_list.bind('<<TreeviewSelect>>',
                          self.item_selected)
@@ -110,5 +120,29 @@ class ItemsTitleList:
         for i in existing_ids:
             item = content.get_item_by_id(i)
             self.titles_list.insert(parent='', index='end', iid=f'{i}',
-                                           text=f'iid{i}',
-                                           values=(item.title, ))
+                                    text=f'iid{i}',
+                                    values=(item.title, ))
+
+    def tag_changed_items(self):
+        for item_iid in self.get_content_callback().existing_ids():
+            is_modified = self.has_item_been_modified(item_iid)
+            if is_modified:
+                self.titles_list.item(f'{item_iid}', tags='content_modified')
+            else:
+                self.titles_list.item(f'{item_iid}', tags='')
+
+    def has_item_been_modified(self, item_iid: int) -> bool:
+        original_content = self.get_original_content_callback()
+        current_content = self.get_content_callback()
+
+        try:
+            original_item = original_content.get_item_by_id(item_iid)
+            current_item = current_content.get_item_by_id(item_iid)
+
+            title_changed = original_item.title != current_item.title
+            text_changed = original_item.text != current_item.text
+
+            return title_changed or text_changed
+
+        except KeyError:
+            return True

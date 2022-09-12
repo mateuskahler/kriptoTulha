@@ -1,3 +1,4 @@
+from copy import deepcopy
 from tkinter import Frame, ttk
 
 from tulha import ItemsCompilation
@@ -12,16 +13,22 @@ class ContentScreen:
         frame.grid(column=0, row=1, sticky="nsew")
 
         self.items_navigator = ItemsNavigator(
-            frame, self.get_content, self.item_selected)
+            frame, self.get_content, self.get_original_content,
+            self.item_selected)
         self.content_frame = ItemContentEditor(
             frame, self.get_content, self.item_edited)
 
+        self.original_content = ItemsCompilation()
         self.content = ItemsCompilation()
 
     def get_content(self):
         return self.content
 
+    def get_original_content(self):
+        return self.original_content
+
     def load_new_compilation(self, compilation: ItemsCompilation):
+        self.original_content = deepcopy(compilation)
         self.content = compilation
         self.items_navigator.reset_visibility()
 
@@ -32,3 +39,4 @@ class ContentScreen:
         item_iid = self.items_navigator.get_selected_item_iid()
         if item_iid is not None:
             self.content.change_text_of_item_by_id(item_iid, new_content)
+        self.items_navigator.titles_list.tag_changed_items()
