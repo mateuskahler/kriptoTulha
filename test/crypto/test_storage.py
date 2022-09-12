@@ -96,6 +96,17 @@ password two: çmsdfp8u02n1sz-9134"""
 ʕノ•ᴥ•ʔノ ︵ ┻━┻
 
 """
+    elif item_id == 4:
+        title = 'Title and no Text'
+        text = ''
+
+    elif item_id == 5:
+        title = ''
+        text = 'Text and no Title'
+
+    elif item_id == 6:
+        title = ''
+        text = ''
 
     else:
         title = "Sample Title "
