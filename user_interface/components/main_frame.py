@@ -27,7 +27,8 @@ class MainFrame():
         self.top_menu = TopMenu(frame,
                                 self.request_save_file_callback,
                                 self.request_open_file_callback,
-                                self.request_add_item_callback, None)
+                                self.request_add_item_callback,
+                                self.request_remove_item_callback)
 
         self.content_screen = ContentScreen(frame)
 
@@ -93,9 +94,30 @@ class MainFrame():
         return file_saved_ok
 
     def request_add_item_callback(self, title: str):
-        new_iid = self.content_screen.content.add_entry(title, text='')
+        new_iid = self.content_screen.get_content().add_entry(title, text='')
         self.content_screen.items_navigator.reset_visibility()
         self.content_screen.items_navigator.force_selection(new_iid)
+
+    def request_remove_item_callback(self):
+        item_iid = self.content_screen.items_navigator.get_selected_item_iid()
+        if item_iid is None:
+            return
+
+        item_title = (self.content_screen.
+                      get_content().get_item_by_id(item_iid).title)
+
+        text = f'Delete item \'{item_title}\'?'
+        buttons = [' Delete ', ' Cancel ']
+        confirm_delete = 0
+        user_answer = simpledialog.SimpleDialog(
+            master=self.frame,
+            text=text,
+            buttons=buttons,
+            cancel=1,
+            title="Delete Item?").go()
+        if user_answer == confirm_delete:
+            self.content_screen.get_content().remove_entry_by_id(item_iid)
+            self.content_screen.items_navigator.reset_visibility()
 
     def request_password_and_open(self, filepath) -> bool:
         base_file_name = os.path.splitext(os.path.basename(filepath))[0]

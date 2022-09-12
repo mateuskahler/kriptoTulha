@@ -8,7 +8,7 @@ class TopMenu:
                  request_save_file_callback: Callable[[], bool],
                  request_open_file_callback: Callable[[], bool],
                  add_item_callback: Callable[[str], None],
-                 remove_item_callback: None
+                 remove_item_callback: Callable[[], None]
                  ) -> None:
         self.request_save_file_callback = request_save_file_callback
         self.request_open_file_callback = request_open_file_callback
@@ -22,7 +22,7 @@ class TopMenu:
         button_add_item.grid(column=0, row=0, sticky="we")
 
         button_del_item = ttk.Button(frame, text='-',
-                                     command=lambda *_: remove_item_callback)
+                                     command=remove_item_callback)
         button_del_item.grid(column=1, row=0, sticky="we")
 
         empty_space = ttk.Frame(frame)

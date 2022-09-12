@@ -36,6 +36,13 @@ class ItemsCompilation:
         new_item = SingleItem(title=current_item.title, text=new_text)
         self.entries[iid] = new_item
 
+    def remove_entry_by_id(self, iid: int) -> bool:
+        try:
+            self.entries.pop(iid)
+            return True
+        except KeyError:
+            return False
+
     def _generate_new_id(self) -> int:
         self.id_counter += 1
         return self.id_counter
