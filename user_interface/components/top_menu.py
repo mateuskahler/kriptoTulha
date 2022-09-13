@@ -10,6 +10,7 @@ class TopMenu:
                  add_item_callback: Callable[[str], None],
                  remove_item_callback: Callable[[], None]
                  ) -> None:
+        self.parent = parent
         self.request_save_file_callback = request_save_file_callback
         self.request_open_file_callback = request_open_file_callback
         self.add_item_callback = add_item_callback
@@ -51,6 +52,7 @@ class TopMenu:
 
     def add_item(self):
         title = simpledialog.askstring(
+            parent=self.parent,
             title='New Item Title',
             prompt='Provide a title for the new item:')
         if title is None:
