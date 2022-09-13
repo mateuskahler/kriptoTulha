@@ -122,6 +122,7 @@ class MainFrame():
     def request_password_and_open(self, filepath) -> bool:
         base_file_name = os.path.splitext(os.path.basename(filepath))[0]
         user_password = simpledialog.askstring(
+            parent=self.frame,
             title='Password Required',
             prompt=f'Enter the password for \"{base_file_name}\"',
             show='*')
