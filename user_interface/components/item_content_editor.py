@@ -14,6 +14,7 @@ class ItemContentEditor:
 
         frame = ttk.Frame(
             parent, padding="5 5 5 5", style="EstiloY.TFrame")
+        frame.grid(column=1, row=0, sticky="nsew")
 
         editable_field = ObservableText(frame, undo=True)
         editable_field.grid(column=0, row=0, sticky='nsew')
@@ -27,7 +28,8 @@ class ItemContentEditor:
 
         self.editable_field = editable_field
 
-        frame.grid(column=1, row=0, sticky="nsew")
+        frame.columnconfigure(0, weight=1)
+        frame.rowconfigure(0, weight=1)
 
     def load_item_text(self, item_iid: int | None):
         # unbind text modification event, so the load does not trigger

@@ -11,6 +11,9 @@ class ContentScreen:
     def __init__(self, parent: ttk.Frame) -> None:
         frame = ttk.Frame(parent, padding="5 0 5 5")
         frame.grid(column=0, row=1, sticky="nsew")
+        frame.grid_columnconfigure(0, weight=1)
+        frame.grid_columnconfigure(1, weight=1)
+        frame.grid_rowconfigure(0, weight=1)
 
         self.items_navigator = ItemsNavigator(
             frame, self.get_content, self.has_item_been_modified,
