@@ -77,18 +77,7 @@ class ItemsTitleList:
         frame = ttk.Frame(parent, padding="0 5 0 0")
         frame.grid(column=0, row=1, sticky="nsew")
 
-        titles_list = ttk.Treeview(frame, selectmode="browse")
-        titles_list['columns'] = ('titles')
-        titles_list.heading(0, text='Items')
-        titles_list_scroll = ttk.Scrollbar(frame, orient=tk.VERTICAL,
-                                           command=titles_list.yview)
-        titles_list_scroll.grid(column=1, row=0, sticky='ns')
-        titles_list.configure(yscroll=titles_list_scroll.set)
-
-        italic_font = font.Font(font=font.nametofont('TkTextFont'))
-        italic_font.config(slant='italic', weight='bold')
-        titles_list.tag_configure(
-            'content_modified', font=italic_font)
+        titles_list = self.create_title_list(frame)
 
         titles_list.bind('<<TreeviewSelect>>',
                          self.item_selected)
@@ -139,3 +128,26 @@ class ItemsTitleList:
                 self.titles_list.item(f'{item_iid}', tags='content_modified')
             else:
                 self.titles_list.item(f'{item_iid}', tags='')
+
+    def create_title_list(self, parent_frame):
+        titles_list = ttk.Treeview(parent_frame, selectmode="browse")
+
+        titles_list['columns'] = ('titles')
+        titles_list.heading(0, text='Items')
+        titles_list_scroll = ttk.Scrollbar(parent_frame, orient=tk.VERTICAL,
+                                           command=titles_list.yview)
+        titles_list_scroll.grid(column=1, row=0, sticky='ns')
+        titles_list.configure(yscroll=titles_list_scroll.set)
+
+        ttk_style = ttk.Style()
+        default_font_name = ttk_style.configure(".", "font")
+        item_modified_font = font.Font(font=font.nametofont(default_font_name))
+        item_modified_font.config(slant='italic', weight='bold')
+
+        titles_list.tag_configure(
+            'content_modified', font=item_modified_font)
+
+        font_linespace = item_modified_font.metrics('linespace')
+        ttk_style.configure('Treeview', rowheight=int(font_linespace*1.1))
+
+        return titles_list
