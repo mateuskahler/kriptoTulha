@@ -146,6 +146,7 @@ class MainFrame():
     def request_password_and_save(self, filepath) -> bool:
         base_file_name = os.path.splitext(os.path.basename(filepath))[0]
         user_password = ask_password_twice_dialog(
+            self.frame,
             title=f'Saving \'{base_file_name}\'',
             minimun_password_length=RECOMMENDED_MINIMUN_PASSWORD_LENGTH)
 

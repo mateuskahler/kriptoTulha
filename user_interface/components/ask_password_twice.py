@@ -11,9 +11,10 @@ class AskTwice():
     cancelable by <Esc>.
     """
 
-    def __init__(self, title: str, minimun_password_length: int):
+    def __init__(self, parent, title: str, minimun_password_length: int):
         self.minimun_password_length = minimun_password_length
         self.output: None | str = None
+        self.parent = parent
 
         top_level = Toplevel(None)
         top_level.grid_columnconfigure(0, weight=1)
@@ -114,11 +115,14 @@ class AskTwice():
         top_level.protocol("WM_DELETE_WINDOW",
                            lambda *_: self.cancel_and_quit())
 
+        self.top_level = top_level
+
+        self.center_this_window()
+
         top_level.focus()
         input1_entry.focus()
         top_level.grab_set()
 
-        self.top_level = top_level
         self.top_level.wait_window(self.top_level)
 
     def try_to_output(self):
@@ -150,13 +154,30 @@ class AskTwice():
         self.output = None
         self.top_level.destroy()
 
+    def center_this_window(self):
+        try:
+            self.top_level.update_idletasks()
+            x_start = int(self.parent.winfo_rootx())
+            y_start = int(self.parent.winfo_rooty())
+            x_avail = int(self.parent.winfo_width())
+            y_avail = int(self.parent.winfo_height())
+            x_needed = int(self.top_level.winfo_width())
+            y_needed = int(self.top_level.winfo_height())
 
-def ask_password_twice_dialog(title: str,
+            x_position = int(x_start + (x_avail/2) - (x_needed/2))
+            y_position = int(y_start + (y_avail/2) - (y_needed/2))
+
+            self.top_level.geometry(f'+{x_position}+{y_position}')
+        except Exception:
+            pass
+
+
+def ask_password_twice_dialog(parent, title: str,
                               minimun_password_length: int) -> str | None:
     """
     Opens a windows that asks for a password input in two fields.
 
     Returns the password as a string, or None if the user cancelled.
     """
-    ask_window = AskTwice(title, minimun_password_length)
+    ask_window = AskTwice(parent, title, minimun_password_length)
     return ask_window.output
