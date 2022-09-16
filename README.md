@@ -2,6 +2,11 @@
 # kriptoTulha
 A set of Python functions to store data securely.
 
+https://github.com/mateuskahler/kriptoTulha/blob/main/readme_files/ui_usage_video.mp4
+
+<!--  https://user-images.githubusercontent.com/18375194/190828164-a495957c-911d-4c8e-8f0b-2db49f1e2311.mp4 -->
+
+
 I used to keep a text file on my desktop with a lot of personal data. Realizing that the habit was growing dangerous, I decided to build a program to encrypt the content.
 
 After studying cryptographic primitives, I created an application to browse my personal notes and passwords.
@@ -83,7 +88,7 @@ The content, along with `Salt 2` and the `Validity Stamp`, are fed to a cipher u
 ## Output File
 
 <!-- ![file_structure](https://user-images.githubusercontent.com/18375194/190555150-82ae4c0f-f44e-4303-892b-5f581d963ee2.svg) -->
-![file_structure](/crypto/file_structure.svg)
+![file_structure](/readme_files/file_structure.svg)
 
 The file is saved on disk containing an unencrypted layer with enough information to regenerate the decryption `Primary key` if the user provides the correct password, this layer contains `Salt 1` and `Salt 4`, of 16 and 12 bytes, respectively.  
 
