@@ -2,16 +2,14 @@
 # kriptoTulha
 A set of Python functions to store data securely.
 
-I used to keep a text file on my desktop with a lot of personal data. Realizing that the habit was growing dangerous, I decided to create a program to encrypt the data.
+I used to keep a text file on my desktop with a lot of personal data. Realizing that the habit was growing dangerous, I decided to build a program to encrypt the content.
 
-I used the chance to study cryptographic primitives and build a user interface for navigating my personal notes. 
-
-// User interface under development
+After studying cryptographic primitives, I created an application to browse my personal notes and passwords.
 
 ## Usage
-The user interface can by lauched with
+The user interface can be launched with
 ```sh
-python xxxxxx
+python kriptoTulhaUI.py
 ```
 
 The requirements are listed in `requirements.txt`, and can be installed with
@@ -19,9 +17,11 @@ The requirements are listed in `requirements.txt`, and can be installed with
 pip3 install -r requirements.txt
 ```
 
+This project requires Python >= 3.10, mostly because I enjoy using the type hints.
+
 ## Details
 
-Items are stored as *title* and *content* pairs, but are never saved to disk in readable form. Decoding them requires providing a user-defined password. The encryption scheme follows:
+Items are manipulated as *title* and *content* pairs, but are never saved to disk in readable form. Decoding them requires providing a user-defined password. The encryption scheme follows:
 
 
 ```mermaid
@@ -73,7 +73,6 @@ graph TD
 `Encryption` is done with ChaCha20, a stream cipher.  
 
 ### Key Deviration
-The inputs are a user provided password and the content to encrypt.  
 Two keys are derived from the user provided password, in combination with random generated salts. The salts are called `Salt 1` and `Salt 2`, and the keys are called `Primary Key` and `Secondary Key`, repectively.  
 ### Validity Check
 A cryptographic hash stamp of the content is generated, the function uses the `Secondary Key` with a new salt, `Salt 3`.   
@@ -83,7 +82,14 @@ The content, along with `Salt 2` and the `Validity Stamp`, are fed to a cipher u
 
 ## Output File
 
-// Data format illustration under development
+<!-- ![file_structure](https://user-images.githubusercontent.com/18375194/190555150-82ae4c0f-f44e-4303-892b-5f581d963ee2.svg) -->
+![file_structure](/crypto/file_structure.svg)
+
+The file is saved on disk containing an unencrypted layer with enough information to regenerate the decryption `Primary key` if the user provides the correct password, this layer contains `Salt 1` and `Salt 4`, of 16 and 12 bytes, respectively.  
+
+Once decrypted, the main layer contains `Salt 2`, which is used to generate the `Secondary key`. The `Secondary key` is used in conjunction with `Salt 3`, which is integrated into the `Validity Stamp`, to compare the resulting cryptographic hash of the content with the expected value.
+
+The hashes matching, the contents of the items are reconstructed. Items are arranged contiguously in the decrypted stream, as pairs of utf-8 strings, preceded by their size in bytes.
 
 # Development 
 The program consists of three main modules:
@@ -95,8 +101,7 @@ Code style is enforced by `autopep8` and `flake8`, which are listed in the `dev_
 
 
 # Tests
-I also took the opportunity to study Python's built-in `unittest` module.  
-To run all the tests:  
-`python -m unittest`
+Tests of encryption and storage routines can be performed with:  
+`python -m unittest -v`
 
 The tests are also run as a Github action on pull requests.
