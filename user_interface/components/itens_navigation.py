@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import StringVar, ttk, font
 from typing import Callable
+from thefuzz import fuzz
 
 from tulha import ItemsCompilation
 
@@ -13,11 +14,13 @@ class ItemsNavigator:
         frame = ttk.Frame(parent, padding="0 5 5 5")
         frame.grid(column=0, row=0, sticky="nsew")
 
-        self.serch_bar = ItemsSearchBar(frame)
         self.titles_list = ItemsTitleList(
             frame, get_content_callback,
             has_item_been_modified_callback,
             item_selected_callback)
+        self.serch_bar = ItemsSearchBar(
+            frame,
+            self.titles_list.update_ordering_criteria)
 
         frame.columnconfigure(0, weight=1)
         frame.rowconfigure(0, weight=0)
@@ -36,7 +39,10 @@ class ItemsNavigator:
 
 
 class ItemsSearchBar:
-    def __init__(self, parent: ttk.Frame):
+    def __init__(self, parent: ttk.Frame,
+                 update_search_text_callback: Callable[[str], None]):
+        self.update_search_text_callback = update_search_text_callback
+
         frame = ttk.Frame(parent, padding="0 0 0 0")
         frame.grid(column=0, row=0, sticky="nsew")
 
@@ -47,13 +53,10 @@ class ItemsSearchBar:
         search_field = ttk.Entry(
             frame, textvariable=self.filter_text)
         self.filter_text.trace_add(
-            'write', lambda *_: None)
+            'write', self.search_modified)
 
         search_field.grid(column=1, row=0, sticky="nsew")
         self.search_field = search_field
-
-        search_field.config(state='disabled')
-        search_titles_label.config(state='disabled')
 
         frame.columnconfigure(0, weight=1)
         frame.columnconfigure(1, weight=1)
@@ -61,6 +64,10 @@ class ItemsSearchBar:
 
     def clear_search(self):
         self.search_field.delete(0, 'end')
+
+    def search_modified(self, *_):
+        search_value = self.filter_text.get()
+        self.update_search_text_callback(search_value)
 
 
 class ItemsTitleList:
@@ -71,6 +78,7 @@ class ItemsTitleList:
         self.get_content_callback = get_content_callback
         self.has_item_been_modified = has_item_been_modified_callback
         self.item_selected_callback = item_selected_callback
+        self.ordering_text = ''
 
         self.iid_last_selected_item: int | None = None
 
@@ -121,6 +129,8 @@ class ItemsTitleList:
                                     text=f'iid{i}',
                                     values=(item.title, ))
 
+        self.sort_items_by_search_text()
+
     def tag_changed_items(self):
         for item_iid in self.get_content_callback().existing_ids():
             is_modified = self.has_item_been_modified(item_iid)
@@ -151,3 +161,26 @@ class ItemsTitleList:
         ttk_style.configure('Treeview', rowheight=int(font_linespace*1.1))
 
         return titles_list
+
+    def update_ordering_criteria(self, search_text: str):
+        self.ordering_text = search_text
+        self.sort_items_by_search_text()
+
+    def sort_items_by_search_text(self):
+        try:
+            items_list = [(self.titles_list.set(i), i)
+                          for i in self.titles_list.get_children('')]
+
+            def rate_item(item_values, item_id) -> int:
+                if len(self.ordering_text) > 0:
+                    return fuzz.ratio(item_values['titles'], self.ordering_text)
+                else:
+                    return int(item_id)
+
+            items_list.sort(key=lambda item: rate_item(*item), reverse=True)
+
+            for position, (_, item_id) in enumerate(items_list):
+                self.titles_list.move(f'{item_id}', '', position)
+
+        except Exception:
+            pass
