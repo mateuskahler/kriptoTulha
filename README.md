@@ -2,11 +2,6 @@
 # kriptoTulha
 A set of Python functions to store data securely.
 
-https://github.com/mateuskahler/kriptoTulha/blob/main/readme_files/ui_usage_video.mp4
-
-<!--  https://user-images.githubusercontent.com/18375194/190828164-a495957c-911d-4c8e-8f0b-2db49f1e2311.mp4 -->
-
-
 I used to keep a text file on my desktop with a lot of personal data. Realizing that the habit was growing dangerous, I decided to build a program to encrypt the content.
 
 After studying cryptographic primitives, I created an application to browse my personal notes and passwords.
@@ -16,6 +11,7 @@ The user interface can be launched with
 ```sh
 python kriptoTulhaUI.py
 ```
+![ui_usage_gif](https://user-images.githubusercontent.com/18375194/190828892-97052cba-1afd-4187-9a55-55b8f267c64b.gif)
 
 The requirements are listed in `requirements.txt`, and can be installed with
 ```sh
