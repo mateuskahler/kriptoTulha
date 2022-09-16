@@ -2,7 +2,10 @@
 # kriptoTulha
 A set of Python functions to store data securely.
 
-![user_interface_video](/readme_files/ui_usage_video.mp4)
+https://github.com/mateuskahler/kriptoTulha/blob/main/readme_files/ui_usage_video.mp4
+
+<!--  https://user-images.githubusercontent.com/18375194/190828164-a495957c-911d-4c8e-8f0b-2db49f1e2311.mp4 -->
+
 
 I used to keep a text file on my desktop with a lot of personal data. Realizing that the habit was growing dangerous, I decided to build a program to encrypt the content.
 
