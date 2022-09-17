@@ -44,6 +44,8 @@ class AskTwice():
         input1_entry.grid(row=1, column=3, columnspan=1, sticky="ew")
         input1_entry.bind(
             '<Return>', lambda *_: self.input1_entry.tk_focusNext().focus())
+        input1_entry.bind(
+            '<KP_Enter>', lambda *_: self.input1_entry.tk_focusNext().focus())
         self.input1_entry = input1_entry
 
         # row 2
@@ -66,6 +68,9 @@ class AskTwice():
         input2_entry.grid(row=3, column=3, columnspan=1, sticky="ew")
         input2_entry.bind(
             '<Return>', lambda *_: self.try_to_output())
+        input2_entry.bind(
+            '<KP_Enter>', lambda *_: self.try_to_output())
+
         self.input2_entry = input2_entry
 
         # row 4
@@ -85,11 +90,13 @@ class AskTwice():
         butOk = ttk.Button(
             frame, text="Ok", command=lambda *_: self.try_to_output())
         butOk.bind('<Return>', lambda *_: self.try_to_output())
+        butOk.bind('<KP_Enter>', lambda *_: self.try_to_output())
         butOk.grid(row=5, column=1, sticky="nsew")
 
         butCancel = ttk.Button(frame, text="Cancel",
                                command=lambda *_: self.cancel_and_quit())
         butCancel.bind('<Return>', lambda *_: self.cancel_and_quit())
+        butCancel.bind('<KP_Enter>', lambda *_: self.cancel_and_quit())
         butCancel.grid(row=5, column=3, sticky="nsew")
 
         # row 6
