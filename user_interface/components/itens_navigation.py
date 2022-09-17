@@ -1,9 +1,15 @@
+import unicodedata
+
 import tkinter as tk
 from tkinter import StringVar, ttk, font
 from typing import Callable
 from thefuzz import fuzz
 
 from tulha import ItemsCompilation
+
+# Search biased towards latin alphabet
+# (my personal use case, English and Portuguese)
+SEARCH_BIAS_LATIN = True
 
 
 class ItemsNavigator:
@@ -163,7 +169,15 @@ class ItemsTitleList:
         return titles_list
 
     def update_ordering_criteria(self, search_text: str):
-        self.ordering_text = search_text
+        ordering_text = self.ordering_text = unicodedata.normalize(
+            'NFKD', search_text).casefold()
+
+        if SEARCH_BIAS_LATIN:
+            ordering_text = ordering_text.encode(
+                encoding='ascii', errors='ignore').decode(encoding='utf-8')
+
+        self.ordering_text = ordering_text
+
         self.sort_items_by_search_text()
 
     def sort_items_by_search_text(self):
@@ -171,16 +185,31 @@ class ItemsTitleList:
             items_list = [(self.titles_list.set(i), i)
                           for i in self.titles_list.get_children('')]
 
-            def rate_item(item_values, item_id) -> int:
-                if len(self.ordering_text) > 0:
-                    return fuzz.ratio(item_values['titles'], self.ordering_text)
-                else:
-                    return int(item_id)
-
-            items_list.sort(key=lambda item: rate_item(*item), reverse=True)
+            items_list.sort(
+                key=lambda item: self.rate_title_similarity(*item),
+                reverse=True)
 
             for position, (_, item_id) in enumerate(items_list):
                 self.titles_list.move(f'{item_id}', '', position)
 
         except Exception:
             pass
+
+    def rate_title_similarity(self, item_values, item_id) -> int:
+        try:
+            ordering_text = self.ordering_text
+            if len(ordering_text) > 0:
+                title = unicodedata.normalize(
+                    'NFKD', item_values['titles']).casefold()
+
+                if SEARCH_BIAS_LATIN:
+                    title = title.encode(
+                        encoding='ascii', errors='ignore').decode(
+                            encoding='utf-8')
+
+                return fuzz.partial_ratio(title, ordering_text)
+            else:
+                return int(item_id)
+
+        except Exception:
+            return 0
