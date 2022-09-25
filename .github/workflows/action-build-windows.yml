@@ -1,7 +1,7 @@
-name: Build Windows
+name: Windows Build
 on: [workflow_dispatch]
 jobs:
-  Build-Windows:
+  Windows-Build:
     runs-on: windows-2022
     steps:
       - name: Check out repository code

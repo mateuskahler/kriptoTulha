@@ -1,7 +1,7 @@
-name: Build Ubuntu
+name: Ubuntu Build
 on: [workflow_dispatch]
 jobs:
-  Build-Ubuntu:
+  Ubuntu-Build:
     runs-on: ubuntu-22.04
     steps:
       - name: Check out repository code
