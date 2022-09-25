@@ -1,0 +1,32 @@
+name: Build macOS
+on: [workflow_dispatch]
+jobs:
+  Build-macOS:
+    runs-on: macos-12
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10.6'
+      - name: General Info
+        run: |
+          echo "🐧 The job was triggered by a ${{ github.event_name }} event."
+          echo "🐧 This job is now running on ${{ runner.os }} server hosted by GitHub."
+          echo "🔎 Branch ${{ github.ref }}"
+          echo "🖥️ Cloned ${{ github.repository }}."
+          echo "Version $(python --version)"
+      - name: Install dependencies
+        run: |
+          pip3 install -r requirements.txt
+          pip3 install pyinstaller==5.4.1
+      - name: Build 
+        run: |
+          pyinstaller --noconsole --onefile --hidden-import argon2-cffi --hidden-import python-Levenshtein ./kriptoTulhaUI.py
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: kriptoTulhaUI_macos_12
+          path: dist/kriptoTulhaUI
+          retention-days: 5
