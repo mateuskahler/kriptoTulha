@@ -2,3 +2,6 @@
 .vscode/*
 venv/*
 testing.kryptoTulha
+build/*
+dist/*
+kriptoTulhaUI.spec
