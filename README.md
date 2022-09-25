@@ -1,4 +1,5 @@
-[![Python Unit Tests](https://github.com/mateuskahler/kriptoTulha/actions/workflows/action-automated-tests.yml/badge.svg)](https://github.com/mateuskahler/kriptoTulha/actions/workflows/action-automated-tests.yml)  
+[![Python Unit Tests](https://github.com/mateuskahler/kriptoTulha/actions/workflows/action-automated-tests.yml/badge.svg)](https://github.com/mateuskahler/kriptoTulha/actions/workflows/action-automated-tests.yml) [![Ubuntu Build](https://github.com/mateuskahler/kriptoTulha/actions/workflows/action-build-ubuntu.yml/badge.svg)](https://github.com/mateuskahler/kriptoTulha/actions/workflows/action-build-ubuntu.yml) [![Windows Build](https://github.com/mateuskahler/kriptoTulha/actions/workflows/action-build-windows.yml/badge.svg)](https://github.com/mateuskahler/kriptoTulha/actions/workflows/action-build-windows.yml)  
+
 # kriptoTulha
 A set of Python functions to store data securely.
 
