@@ -1,7 +1,7 @@
-name: Build macOS
+name: macOS Build
 on: [workflow_dispatch]
 jobs:
-  Build-macOS:
+  macOS-Build:
     runs-on: macos-12
     steps:
       - name: Check out repository code
