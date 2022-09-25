@@ -10,7 +10,7 @@ After studying cryptographic primitives, I created an application to browse my p
 ![ui_usage_gif](https://user-images.githubusercontent.com/18375194/190828892-97052cba-1afd-4187-9a55-55b8f267c64b.gif)
 
 ## User Interface Usage
-Once I was satisfied with the script, I decided to export it as a standalone executable. You can clone the repository and run the Python script or download the executable.
+You can clone the repository and run the Python script or download the executable.
 
 The executables are available on the [releases page](https://github.com/mateuskahler/kriptoTulha/releases), and instructions on how to build it yourself are presented below. 
 
