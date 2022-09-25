@@ -6,12 +6,17 @@ I used to keep a text file on my desktop with a lot of personal data. Realizing 
 
 After studying cryptographic primitives, I created an application to browse my personal notes and passwords.
 
-## Usage
-The user interface can be launched with
+![ui_usage_gif](https://user-images.githubusercontent.com/18375194/190828892-97052cba-1afd-4187-9a55-55b8f267c64b.gif)
+
+## User Interface Usage
+Once I was satisfied with the script, I decided to export it as a standalone executable. You can clone the repository and run the Python script or download the executable.
+
+The executables are available on the [releases page](https://github.com/mateuskahler/kriptoTulha/releases), and instructions on how to build it yourself are presented below. 
+
+To launch the User Interface as a Python script, execute `kriptoTulhaUI.py`:
 ```sh
 python kriptoTulhaUI.py
 ```
-![ui_usage_gif](https://user-images.githubusercontent.com/18375194/190828892-97052cba-1afd-4187-9a55-55b8f267c64b.gif)
 
 The requirements are listed in `requirements.txt`, and can be installed with
 ```sh
@@ -19,6 +24,14 @@ pip3 install -r requirements.txt
 ```
 
 This project requires Python >= 3.10, mostly because I enjoy using the type hints.
+
+If you want to compile the script as a standalone executable yourself:
+```
+pyinstaller --noconsole --onefile --hidden-import argon2-cffi --hidden-import python-Levenshtein ./kriptoTulhaUI.py
+```
+
+These are the options I used. For details, take a look at [pyinstaller](https://pyinstaller.org/) homepage.  
+Once compiled (or if you downloaded the program) the dependencies are no longer needed to run the application. 
 
 ## Details
 
